@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piezas Educativas HIC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: search header, a result banner with the exact piece found, then the catalog grouped by especialidad */
+:root{
+  --bg:#f2f5f6;
+  --surface:#ffffff;
+  --fg:#152027;
+  --muted:#5b6b76;
+  --line:#dde4e7;
+  --accent:#0d6e5e;
+  --accent-ink:#083f35;
+  --found:#b5541f;
+  --found-bg:#fbeee7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10171b;
+    --surface:#182228;
+    --fg:#e9eef0;
+    --muted:#93a4ad;
+    --line:#2b383f;
+    --accent:#3fcbae;
+    --accent-ink:#bdf3e5;
+    --found:#f3a479;
+    --found-bg:#2c1f17;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10171b;
+  --surface:#182228;
+  --fg:#e9eef0;
+  --muted:#93a4ad;
+  --line:#2b383f;
+  --accent:#3fcbae;
+  --accent-ink:#bdf3e5;
+  --found:#f3a479;
+  --found-bg:#2c1f17;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:"Public Sans",system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 56px}
+
+header.top{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+h1{
+  font-family:"Fraunces",Georgia,serif;
+  font-weight:600;
+  font-size:clamp(26px,4vw,34px);
+  margin:0;
+  text-wrap:balance;
+}
+.sub{color:var(--muted);font-size:15px;max-width:62ch;margin:2px 0 0}
+
+form.search{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+.search input[type="text"]{
+  flex:1 1 260px;
+  min-width:0;
+  background:var(--surface);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:13px 14px;
+  font-size:16px;
+  color:var(--fg);
+  font-family:inherit;
+}
+.search input[type="text"]:focus{outline:2px solid var(--accent);outline-offset:1px}
+.search button{
+  font-family:"Public Sans",sans-serif;
+  font-weight:600;
+  font-size:15px;
+  border:none;
+  border-radius:10px;
+  padding:13px 20px;
+  cursor:pointer;
+  background:var(--accent);
+  color:#fff;
+}
+.search button:active{transform:translateY(1px)}
+.search .clear{
+  background:transparent;
+  color:var(--muted);
+  border:1.5px solid var(--line);
+}
+
+#resultado{margin-top:22px}
+.result-banner{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.result-banner b{color:var(--fg)}
+
+.detail-card{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  background:var(--found-bg);
+  border:1.5px solid var(--found);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:12px;
+}
+.detail-card .badge{flex:none}
+.detail-card h2{
+  font-family:"Fraunces",Georgia,serif;
+  font-size:19px;
+  font-weight:600;
+  margin:0 0 4px;
+  text-wrap:balance;
+}
+.detail-card .meta{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;
+  color:var(--muted);
+  margin:0 0 10px;
+}
+.detail-card a.open{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:600;
+  font-size:14px;
+  color:var(--accent-ink);
+  text-decoration:none;
+  border-bottom:1.5px solid currentColor;
+  padding-bottom:1px;
+}
+
+.empty-msg{
+  font-size:14.5px;
+  color:var(--muted);
+  background:var(--surface);
+  border:1.5px dashed var(--line);
+  border-radius:12px;
+  padding:16px 18px;
+  margin-bottom:14px;
+}
+
+.catalog-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  margin:30px 0 14px;
+  border-top:1px solid var(--line);
+  padding-top:22px;
+}
+.catalog-head h3{
+  font-family:"Fraunces",Georgia,serif;
+  font-size:17px;
+  font-weight:600;
+  margin:0;
+}
+.catalog-head span{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted)}
+
+#catalog{display:flex;flex-direction:column;gap:22px}
+
+.group{display:flex;flex-direction:column;gap:8px}
+.group[hidden]{display:none}
+.group-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.group-head .mini-badge{
+  width:26px;height:26px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;flex:none;color:#fff;
+}
+.group-head .mini-badge svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.group-head h4{
+  font-size:14.5px;
+  font-weight:700;
+  margin:0;
+}
+.group-head .n{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;
+  color:var(--muted);
+}
+
+.items{display:flex;flex-direction:column;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 14px;
+  text-align:left;
+  background:none;
+  border:none;
+  border-top:1px solid var(--line);
+  font-family:inherit;
+  cursor:pointer;
+  width:100%;
+  color:var(--fg);
+}
+.items .item:first-child{border-top:none}
+.item[hidden]{display:none}
+.item:hover,.item:focus-visible{background:var(--bg);outline:none}
+.item.match{background:var(--found-bg)}
+.item .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.item .it-txt{min-width:0;flex:1}
+.item .it-title{font-size:14px;font-weight:600;line-height:1.35}
+.item .it-tag{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+.item .go{flex:none;color:var(--muted);font-size:13px}
+
+.badge{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  flex:none;
+  color:#fff;
+}
+.badge svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+footer.note{margin-top:30px;color:var(--muted);font-size:12.5px;line-height:1.6}
+footer.note a{color:var(--muted)}
+
+@media (max-width:480px){
+  .search{flex-direction:column}
+  .search button, .search input{width:100%}
+  .item .it-tag{display:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<symbol id="ic-ribbon" viewBox="0 0 24 24"><path d="M9 3c1 3 1 5 3 7 2-2 2-4 3-7M12 10v4M8 15a4 4 0 108 0 4 4 0 00-8 0z"/></symbol>
+<symbol id="ic-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 00-3 3 3 3 0 00-2 5 3 3 0 002 5 3 3 0 003 3h1V4H9zM15 4a3 3 0 013 3 3 3 0 012 5 3 3 0 01-2 5 3 3 0 01-3 3h-1V4h1z"/></symbol>
+<symbol id="ic-bone" viewBox="0 0 24 24"><path d="M6.5 6.5a2 2 0 10-2.9 2.8l8 8a2 2 0 102.8 2.9 2 2 0 002.9-2.8l-8-8A2 2 0 106.5 6.5z"/></symbol>
+<symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.8 5 6 5c2 0 3.3 1.1 4 2.2.7-1.1 2-2.2 4-2.2 3.2 0 4.8 3 3.3 6.2C19 15.6 12 20 12 20z"/><path d="M8 11h2l1-2 2 4 1-2h2"/></symbol>
+<symbol id="ic-female" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6"/></symbol>
+<symbol id="ic-baby" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4"/><path d="M8 13c-3 1-4 4-3 8M16 13c3 1 4 4 3 8M10 8.5c.5.7 1.3.7 2 0M14 8.5c-.5.7-1.3.7-2 0"/></symbol>
+<symbol id="ic-mirror" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M12 15v6M9 21h6"/><path d="M9 8l1.5 1.5M15 8l-1.5 1.5"/></symbol>
+<symbol id="ic-hands" viewBox="0 0 24 24"><path d="M12 20s-6-3.5-8-7c-1.2-2 .5-4.5 2.6-3.6 1 .4 1.6 1.2 2 2M12 20s6-3.5 8-7c1.2-2-.5-4.5-2.6-3.6-1 .4-1.6 1.2-2 2"/><path d="M9.5 10.5l1-3a1.4 1.4 0 012.7.3l.3 2.7"/></symbol>
+<symbol id="ic-stomach" viewBox="0 0 24 24"><path d="M8 3c0 3-3 3-3 7a7 7 0 0014 0c0-2-1-3-2.5-3S14 8 12 8s-2-1.5-2-2.5S9 3 8 3z"/></symbol>
+<symbol id="ic-kidney" viewBox="0 0 24 24"><path d="M9 3C5 3 3 7 4 11c1 4-1 6 1 9 2 2 5 0 5-3 0-2-2-2-2-5 0-4 3-5 5-4 3 1 4-2 2-4-1.5-1.5-4-1-6 1z"/></symbol>
+<symbol id="ic-lungs" viewBox="0 0 24 24"><path d="M12 4v8M12 12c-1-3-3-3-4-2-2 2-2 7-1 8 1.5 1.5 4-1 4-3M12 12c1-3 3-3 4-2 2 2 2 7 1 8-1.5 1.5-4-1-4-3"/></symbol>
+<symbol id="ic-stetho" viewBox="0 0 24 24"><path d="M6 4v5a4 4 0 008 0V4M10 13v2a5 5 0 0010 0v-2"/><circle cx="20" cy="11" r="1.6"/><circle cx="6" cy="4" r="1.3"/><circle cx="14" cy="4" r="1.3"/></symbol>
+<symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><circle cx="12" cy="12" r="2.2"/></symbol>
+<symbol id="ic-mind" viewBox="0 0 24 24"><path d="M12 4a6 6 0 00-6 6c0 2 1 3 1 5h10c0-2 1-3 1-5a6 6 0 00-6-6z"/><path d="M9 20h6M10 17h4"/></symbol>
+<symbol id="ic-dumbbell" viewBox="0 0 24 24"><path d="M4 10v4M20 10v4M2 9v6M22 9v6M7 12h10"/><path d="M4 9v6a1 1 0 001-1V10a1 1 0 00-1-1zM20 9a1 1 0 00-1 1v4a1 1 0 001 1z"/></symbol>
+<symbol id="ic-heartplus" viewBox="0 0 24 24"><path d="M12 19s-6.5-4-8.5-8C2 8 3.6 5.3 6.5 5.3c1.8 0 3 1 3.5 1.9.5-.9 1.7-1.9 3.5-1.9 2.9 0 4.5 2.7 3 5.7C18.5 15 12 19 12 19z"/><path d="M17 3v4M15 5h4"/></symbol>
+<symbol id="ic-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a2 2 0 014 0h2M8 11l2.5 2.5L16 8"/></symbol>
+<symbol id="ic-syringe" viewBox="0 0 24 24"><path d="M3 21l5-5M8 16l8-8M13 4l2 2M15 2l2 2M10 9l5 5M19 5l-2-2"/></symbol>
+<symbol id="ic-drop" viewBox="0 0 24 24"><path d="M12 3c3 4 6 7.5 6 11a6 6 0 11-12 0c0-3.5 3-7 6-11z"/></symbol>
+<symbol id="ic-shoe" viewBox="0 0 24 24"><path d="M3 15c0-2 1-3 2.5-3.5L10 10l2.5-3c1-1 2-1 3 0l2 2c1 1 3 1 4 .5v3c0 2.5-2 4.5-4.5 4.5H5a2 2 0 01-2-2z"/><path d="M8 11.5L10 14"/></symbol>
+<symbol id="ic-swap" viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></symbol>
+</defs>
+</svg>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="eyebrow">HIC · Educación al paciente y su familia</span>
+  <h1>Piezas educativas</h1>
+  <p class="sub">Busca por el nombre puntual de una pieza (por ejemplo «falla cardíaca» o «lactancia materna») y aparece en pantalla apenas la escribes, con el enlace directo al documento del HIC.</p>
+</header>
+
+<form class="search" id="searchForm" autocomplete="off">
+  <input type="text" id="q" name="q" placeholder="Ej: falla cardíaca, lactancia materna, EPOC…" aria-label="Buscar pieza por nombre">
+  <button type="submit">Buscar</button>
+  <button type="button" class="clear" id="clearBtn">Limpiar</button>
+</form>
+
+<div id="resultado"></div>
+
+<div class="catalog-head">
+  <h3>Catálogo completo</h3>
+  <span id="countLabel"></span>
+</div>
+<div id="catalog"></div>
+
+<footer class="note">
+  Datos leídos de <a href="https://hic.fcv.org/co/educacion-al-paciente-y-su-familia" target="_blank" rel="noopener">hic.fcv.org/co/educacion-al-paciente-y-su-familia</a> y de cada una de sus 21 categorías. Cada pieza abre su página original en hic.fcv.org en una pestaña nueva.
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var specialties = [
+    {slug:"cancer", nombre:"Cáncer", icon:"ic-ribbon", color:"#b5541f", items:[
+      ["Cáncer de Próstata","https://hic.fcv.org/co/material-educativo/2026-06-25-19-50-29","Cuidadores"],
+      ["Cáncer de mama","https://hic.fcv.org/co/material-educativo/cancer-de-mama","Cáncer de mama"],
+      ["Sobreviviendo al cáncer de mama","https://hic.fcv.org/co/material-educativo/sobreviviendo-al-cancer-de-mama","Cáncer de mama"],
+      ["Prevención del cáncer","https://hic.fcv.org/co/material-educativo/prevencion-del-cancer","Prevención del cáncer"],
+      ["Guía de ejercicios para la recuperación después de la cirugía de mama","https://hic.fcv.org/co/material-educativo/2026-05-21-20-56-34","Cáncer de mama"],
+      ["Cáncer en palabras sencillas: Una guia para todos","https://hic.fcv.org/co/material-educativo/cancer-en-palabras-sencillas-una-guia-para-todos","Cáncer en palabras sencillas"],
+      ["Detección y prevención del cáncer de mama","https://hic.fcv.org/co/material-educativo/deteccion-y-prevencion-del-cancer-de-mama","Cáncer de mama"]
+    ]},
+    {slug:"neurologia", nombre:"Neurología", icon:"ic-brain", color:"#5b4fb0", items:[
+      ["Estimulación Magnética Transcraneal","https://hic.fcv.org/co/material-educativo/2026-06-19-15-55-37","Neurológico"],
+      ["Rehabilitación hospitalaria del paciente con ataque cerebrovascular (ACV)","https://hic.fcv.org/co/material-educativo/rehabilitacion-hospitalaria-del-paciente-acv","Neurológico"],
+      ["Rehabilitación en casa del paciente con ataque cerebrovascular (ACV)","https://hic.fcv.org/co/material-educativo/rehabilitacion-en-casa-del-paciente-cerebrovascular-acv","Neurológico"],
+      ["Ataque Cerebrovascular (ACV)","https://hic.fcv.org/co/material-educativo/ataque-cerebrovascular-acv","Ataque Cerebrovascular"],
+      ["¿Comó prevenir un ataque cerebrovascular?","https://hic.fcv.org/co/material-educativo/prevenir-ataque-cerebrovascular","Ataque cerebrovascular"],
+      ["Guía del paciente: Tratamiento con Ketamina intravenosa para la depresión","https://hic.fcv.org/co/material-educativo/2026-05-21-20-36-48","Neurológico"],
+      ["Síntomas ACV","https://hic.fcv.org/co/material-educativo/sintomas-acv","Síntomas ACV"],
+      ["Ejercicios de rehabilitación post ACV","https://hic.fcv.org/co/material-educativo/ejercicios-de-rehabilitacion-post-acv","Síntomas ACV"]
+    ]},
+    {slug:"ortopedia", nombre:"Ortopedia", icon:"ic-bone", color:"#3a6ea5", items:[
+      ["¡Evita lesiones en tus rodillas!","https://hic.fcv.org/co/material-educativo/2026-08-10-20-19-32","Ortopédico"],
+      ["Cartilla educativa: Reemplazo Articular de Cadera","https://hic.fcv.org/co/material-educativo/2026-08-13-13-25-49","Reemplazo de cadera y rodilla"],
+      ["¿Qué esperar de una cirugía de reemplazo total de rodilla?","https://hic.fcv.org/co/material-educativo/2026-08-14-14-37-29","Cuidadores"],
+      ["Educational Brochure: Hip Joint Replacement","https://hic.fcv.org/co/material-educativo/2026-09-14-13-01-23","Reemplazo de cadera y rodilla"],
+      ["Educational Guide Total Knee Replacement","https://hic.fcv.org/co/material-educativo/2026-09-15-15-48-59","Reemplazo de cadera y rodilla"],
+      ["Rehabilitación de Hombro","https://hic.fcv.org/co/material-educativo/rehabilitacion-de-hombro","Ortopédico"],
+      ["Rehabilitación Hospitalaria al Paciente con Reemplazo total de Cadera","https://hic.fcv.org/co/material-educativo/rehabilitacion-hospitalaria-reemplazo-cadera","Ortopédico"],
+      ["Rehabilitación Reemplazo Total de Rodilla","https://hic.fcv.org/co/material-educativo/rehabilitacion-reemplazo-total-de-rodilla","Ortopédico"],
+      ["Rehabilitación en Casa al Paciente con Reemplazo Total de Cadera","https://hic.fcv.org/co/material-educativo/rehabilitacion-en-casa-paciente-reemplazo-cadera","Ortopédico"],
+      ["Reemplazo total de rodilla","https://hic.fcv.org/co/material-educativo/reemplazo-total-de-rodilla","Reemplazo de cadera y rodilla"],
+      ["Recomendaciones para el paciente antes, durante y después de su cirugía","https://hic.fcv.org/co/material-educativo/2026-06-02-12-45-27","Ortopédico"],
+      ["Patient Recommendations Before, during, and after your joint replacement surgery","https://hic.fcv.org/co/material-educativo/2026-06-02-12-47-20","Ortopédico"]
+    ]},
+    {slug:"cardiovascular", nombre:"Cardiovascular", icon:"ic-heart", color:"#c23b3b", items:[
+      ["Anticoagulación para pacientes con warfarina","https://hic.fcv.org/co/material-educativo/2026-06-18-19-43-00","Cuidadores"],
+      ["Recomendaciones para pacientes en tratamiento con anticoagulantes","https://hic.fcv.org/co/material-educativo/2026-06-18-20-37-25","Cuidadores"],
+      ["Lo que necesitas saber de la Falla Cardíaca","https://hic.fcv.org/co/material-educativo/2026-08-14-14-11-24","Cuidadores"],
+      ["Lo que necesitas saber sobre la Cardiopatía Chagásica","https://hic.fcv.org/co/material-educativo/lo-que-necesitas-saber-sobre-la-cardiopatia-chagasica","Cuidadores"],
+      ["Herramienta para la educación del paciente con Insuficiencia Cardiaca","https://hic.fcv.org/co/material-educativo/2026-09-11-15-07-51","Cuidadores"],
+      ["Cartilla Padres / Cuidadores","https://hic.fcv.org/co/material-educativo/2026-09-11-15-21-09","Cuidadores"],
+      ["Manejo de la Hipertension Arterial","https://hic.fcv.org/co/material-educativo/manejo-de-la-hipertension-arterial","Manejo de la Hipertension Arterial"],
+      ["Cartilla Padres / Cuidadores — Programa Promesa","https://hic.fcv.org/co/material-educativo/cartilla-promesa","Programa Promesa"],
+      ["Folleto cardiopatías congénitas en el adulto","https://hic.fcv.org/co/material-educativo/2026-06-17-14-41-21","Cardiopatías congénitas complejas"],
+      ["Cardiopatías congénitas complejas","https://hic.fcv.org/co/material-educativo/cardiopatias-congenitas-complejas","Cardiopatías congénitas complejas"]
+    ]},
+    {slug:"cuidado-de-la-mujer", nombre:"Cuidado de la Mujer", icon:"ic-female", color:"#b23a73", items:[
+      ["¿Qué es una ligadura de trompas?","https://hic.fcv.org/co/material-educativo/2026-06-25-18-56-24","Cuidadores"],
+      ["Planificación Familiar","https://hic.fcv.org/co/material-educativo/2026-06-25-19-27-42","Cuidadores"],
+      ["Maternidad segura","https://hic.fcv.org/co/material-educativo/2026-08-12-13-19-00","Cuidadores"],
+      ["3 consejos para favorecer una lactancia más cómoda y efectiva para ti y tu bebé","https://hic.fcv.org/co/material-educativo/2026-08-12-13-24-56","Cuidadores"],
+      ["Preguntas frecuentes sobre lactancia materna","https://hic.fcv.org/co/material-educativo/2026-08-12-13-29-48","Cuidadores"],
+      ["Ginecología Infanto juvenil","https://hic.fcv.org/co/material-educativo/ginecologi-a-infanto-juvenil","Cuidadores"],
+      ["Salud Mental Perinatal","https://hic.fcv.org/co/material-educativo/salud-mental-perinatal","Cuidadores"],
+      ["Programa de Cirugía Ginecológica","https://hic.fcv.org/co/material-educativo/programa-de-cirugia-ginecologica","Cuidado de la Mujer"],
+      ["Beneficios de la cirugía mínimamente invasiva","https://hic.fcv.org/co/material-educativo/beneficios-de-la-cirugia-minimamente-invasiva","Cuidado de la Mujer"],
+      ["Piso Pélvico","https://hic.fcv.org/co/material-educativo/piso-pelvico","Cuidado de la Mujer"],
+      ["Endometriosis","https://hic.fcv.org/co/material-educativo/endometriosis","Cuidado de la Mujer"]
+    ]},
+    {slug:"pediatria", nombre:"Pediatría", icon:"ic-baby", color:"#2f9e6e", items:[
+      ["Aprende a manejar el asma infantil","https://hic.fcv.org/co/material-educativo/aprende-a-manejar-el-asma-infantil","Asma infantil"],
+      ["Cartillas Piso Pélvico","https://hic.fcv.org/co/material-educativo/cartillas-piso-pelvico","Cuidado de la Mujer"],
+      ["Desarrollo neurológico de los niños","https://hic.fcv.org/co/material-educativo/2026-08-12-13-50-49","Cuidadores"],
+      ["Enfermedad Diarreica Aguda (EDA)","https://hic.fcv.org/co/material-educativo/2026-06-25-20-02-32","Cuidadores"],
+      ["Faringoamigdalitis Estreptocócica Prevención y cuidados","https://hic.fcv.org/co/material-educativo/faringoamigdalitis-estreptococica-prevencion-y-cuidados","Faringoamigdalitis estreptocócica"],
+      ["Infecciones respiratorias agudas","https://hic.fcv.org/co/material-educativo/infecciones-respiratorias-agudas","Infecciones respiratorias agudas"],
+      ["La lactancia materna es amor convertido en alimento","https://hic.fcv.org/co/material-educativo/la-lactancia-materna-es-amor-convertido-en-alimento","Lactancia materna"],
+      ["Orientaciones al alta para pacientes pediátricos con trasplante renal","https://hic.fcv.org/co/material-educativo/2026-06-18-18-30-04","Pediatría"],
+      ["Orientaciones en casa después del Trasplante Renal Pediátrico","https://hic.fcv.org/co/material-educativo/2026-06-18-18-48-55","Pediatría"],
+      ["Otitis prevención y signos de alarma","https://hic.fcv.org/co/material-educativo/otitis-prevencion-y-signos-de-alarma","Otitis"],
+      ["Programa Canguro Fase 1","https://hic.fcv.org/co/material-educativo/programa-canguro-fase-1","Pediatría"],
+      ["Programa Canguro Fase 2","https://hic.fcv.org/co/material-educativo/programa-canguro-fase-2","Pediatría"],
+      ["Programa Canguro Fase 3","https://hic.fcv.org/co/material-educativo/programa-canguro-fase-3","Pediatría"],
+      ["Programa de Malformaciones anorrectales","https://hic.fcv.org/co/material-educativo/programa-de-malformaciones-anorrectales","Pediatría"],
+      ["Programa pediátrico de talla baja","https://hic.fcv.org/co/material-educativo/programa-pediatrico-de-talla-baja","Pediatría"],
+      ["Recomendaciones para el cuidado del bebé y la madre","https://hic.fcv.org/co/material-educativo/recomendaciones-para-el-cuidado-del-bebe-y-la-madre","Pediatría"],
+      ["Síndrome Nefrítico","https://hic.fcv.org/co/material-educativo/sindrome-nefritico","Síndrome Nefrítico"],
+      ["Síndrome Nefrótico","https://hic.fcv.org/co/material-educativo/sindrome-nefrotico","Síndrome Nefrótico"],
+      ["Tu salud, nuestra prioridad","https://hic.fcv.org/co/material-educativo/tu-salud-nuestra-prioridad","Pediatría"],
+      ["¿Por qué un niño puede tener talla baja?","https://hic.fcv.org/co/material-educativo/2026-08-10-20-48-51","Cuidadores"]
+    ]},
+    {slug:"cirugia-plastica-reconstructiva-y-estetica", nombre:"Cirugía Plástica, Reconstructiva y Estética", icon:"ic-mirror", color:"#a3762f", items:[
+      ["Aprende sobre las quemaduras con Max","https://hic.fcv.org/co/material-educativo/2026-07-21-20-41-01","Cuidadores"],
+      ["Cuidados del paciente injertado en el hogar","https://hic.fcv.org/co/material-educativo/cuidados-del-paciente-injertado-en-el-hogar","Quemaduras en el hogar"],
+      ["Cuidados del paciente quemado en el hogar","https://hic.fcv.org/co/material-educativo/cuidados-del-paciente-quemado-en-el-hogar","Quemaduras en el hogar"],
+      ["Prevención de Quemaduras en el Hogar","https://hic.fcv.org/co/material-educativo/prevencion-quemaduras-en-el-hogar","Prevención de quemaduras"],
+      ["Prevención de quemaduras: protege tu salud y la de tu familia","https://hic.fcv.org/co/material-educativo/prevencion-quemaduras-protege-tu-salud-y-la-de-familia","Prevención de quemaduras"]
+    ]},
+    {slug:"alivio-del-dolor-y-cuidado-paliativo", nombre:"Alivio del Dolor y Cuidado Paliativo", icon:"ic-hands", color:"#6a6f78", items:[
+      ["Fibromialgia","https://hic.fcv.org/co/material-educativo/2026-08-12-13-34-55","Cuidadores"],
+      ["Cuidados paliativos","https://hic.fcv.org/co/material-educativo/cuidados-paliativos","Cuidados paliativos"]
+    ]},
+    {slug:"cuidado-de-la-salud-digestiva", nombre:"Cuidado de la Salud Digestiva", icon:"ic-stomach", color:"#c07a1f", items:[
+      ["¿Qué es la Enfermedad Diarreica Aguda (EDA)?","https://hic.fcv.org/co/material-educativo/2026-06-25-19-35-33","Cuidadores"],
+      ["Coledocolitiasis - Cartilla educativa","https://hic.fcv.org/co/material-educativo/2026-07-01-13-02-40","Cuidadores"],
+      ["Lesión Benigna de la Vía Biliar - Cartilla educativa","https://hic.fcv.org/co/material-educativo/2026-07-01-13-09-57","Cuidadores"],
+      ["EII","https://hic.fcv.org/co/material-educativo/2026-08-12-13-45-37","Cuidadores"],
+      ["Transformando la Enfermedad Inflamatoria Intestinal en conocimiento","https://hic.fcv.org/co/material-educativo/2026-04-13-16-57-20","Cuidadores"]
+    ]},
+    {slug:"nefrologia-y-urologia", nombre:"Nefrología y Urología", icon:"ic-kidney", color:"#2f8e8e", items:[
+      ["Cólico renal","https://hic.fcv.org/co/material-educativo/colico-renal","Cólico renal"],
+      ["Prevención y manejo de la urolitiasis","https://hic.fcv.org/co/material-educativo/prevencion-y-manejo-de-la-urolitiasis","Urolitiasis"],
+      ["Acompañándote en Casa - Cuidados con tu Nefrostomía","https://hic.fcv.org/co/material-educativo/acompanandote-en-casa-cuidados-con-tu-nefrostomia","Nefrostomía"],
+      ["¿Cómo tener el control de la enfermedad renal crónica mediante los hábitos saludables?","https://hic.fcv.org/co/material-educativo/control-enfermedad-renal-cronica-habitos-saludables","Enfermedad Renal Crónica"],
+      ["Alimentación saludable en la Enfermedad renal crónica","https://hic.fcv.org/co/material-educativo/alimentacion-saludable-en-la-enfermedad-renal-cronica","Enfermedad Renal Crónica"],
+      ["Lo que necesitas saber de la enfermedad renal crónica","https://hic.fcv.org/co/material-educativo/lo-que-necesitas-saber-de-la-enfermedad-renal-cronica","Enfermedad Renal Crónica"],
+      ["Cálculos urinarios","https://hic.fcv.org/co/material-educativo/calculos-urinarios","Cálculos urinarios"]
+    ]},
+    {slug:"cuidado-de-la-salud-respiratoria", nombre:"Cuidado de la Salud Respiratoria", icon:"ic-lungs", color:"#3f8fc4", items:[
+      ["Infección Respiratoria Aguda (IRA)","https://hic.fcv.org/co/material-educativo/2026-06-25-19-44-12","Cuidadores"],
+      ["Enfermedad Pulmonar Obstructiva Crónica - EPOC","https://hic.fcv.org/co/material-educativo/enfermedad-pulmonar-obstructiva-cronica-epoc","EPOC"],
+      ["Guía de Autocuidado para Pacientes con Hipertensión Pulmonar","https://hic.fcv.org/co/material-educativo/autocuidado-pacientes-hipertension-pulmonar","Hipertensión Pulmonar"]
+    ]},
+    {slug:"medicina-interna", nombre:"Medicina Interna", icon:"ic-stetho", color:"#4a5a8a", items:[
+      ["Hipertensión arterial: El enemigo silencioso","https://hic.fcv.org/co/material-educativo/2026-06-18-18-17-33","Manejo de la Hipertension Arterial"],
+      ["Cartilla educativa Viviendo con diabetes mellitus","https://hic.fcv.org/co/material-educativo/cartilla-educativa-viviendo-con-diabetes-mellitus","Cuidadores"],
+      ["El poder de usar bien los medicamentos","https://hic.fcv.org/co/material-educativo/el-poder-de-usar-bien-los-medicamentos","Cuidadores"]
+    ]},
+    {slug:"infectologia", nombre:"Infectología", icon:"ic-shield", color:"#2f7d4f", items:[
+      ["Resistencia a los antibióticos: infórmate, actúa y protege tu salud y la de tu familia","https://hic.fcv.org/co/material-educativo/2026-06-18-20-53-14","Infecciones respiratorias agudas"],
+      ["Hantavirus","https://hic.fcv.org/co/material-educativo/2026-08-12-13-40-18","Cuidadores"],
+      ["Automedicarse no es cuidarte","https://hic.fcv.org/co/material-educativo/automedicarse","Infecciones respiratorias agudas"],
+      ["Recomendaciones para el manejo de infecciones de vías urinarias","https://hic.fcv.org/co/material-educativo/recomendaciones-para-padres-con-pacientes-pediatricos","Vías urinarias"]
+    ]},
+    {slug:"salud-mental", nombre:"Salud Mental", icon:"ic-mind", color:"#7a4fb0", items:[
+      ["Prevención del suicidio","https://hic.fcv.org/co/material-educativo/prevencion-del-suicidio","Prevención del suicidio"],
+      ["Hábitos de vida saludable","https://hic.fcv.org/co/material-educativo/habitos-de-vida-saludable","Neurológico"],
+      ["Adherencia al tratamiento","https://hic.fcv.org/co/material-educativo/adherencia-al-tratamiento","Cuidadores"],
+      ["Cuidar tu mente ayuda a tu cuerpo","https://hic.fcv.org/co/material-educativo/cuidar-tu-mente-ayuda-a-tu-cuerpo","Cuidadores"],
+      ["Síndrome del cuidador","https://hic.fcv.org/co/material-educativo/sindrome-del-cuidador","Cuidadores"]
+    ]},
+    {slug:"medicina-fisica-y-rehabilitacion", nombre:"Medicina Física y Rehabilitación", icon:"ic-dumbbell", color:"#3a8a5a", items:[
+      ["¿Te operaron de cadera o rodilla? Estos ejercicios son clave para tu recuperación","https://hic.fcv.org/co/material-educativo/2026-04-09-15-10-09","Ortopédico"],
+      ["Cuidado del hombro después de un ACV","https://hic.fcv.org/co/material-educativo/cuidado-del-hombro-despue-s-de-un-acv","Ataque Cerebrovascular"],
+      ["Recomendaciones para evitar luxaciones tras un reemplazo de cadera","https://hic.fcv.org/co/material-educativo/2026-04-09-15-12-33","Ortopédico"],
+      ["Disfagia","https://hic.fcv.org/co/material-educativo/folleto-disfagia","Ataque Cerebrovascular"],
+      ["Guía práctica para fortalecer tus habilidades motoras, sensoriales y cognitivas","https://hic.fcv.org/co/material-educativo/fortalecer-tus-habilidades-motoras","Ortopédico"],
+      ["Prepárate para tu reemplazo de cadera o rodilla","https://hic.fcv.org/co/material-educativo/2026-03-31-13-15-20","Ortopédico"]
+    ]},
+    {slug:"promocion-y-mantenimiento-de-la-salud", nombre:"Promoción y Mantenimiento de la Salud", icon:"ic-heartplus", color:"#1f8f7a", items:[
+      ["Diabetes: el control temprano puede marcar la diferencia","https://hic.fcv.org/co/material-educativo/diabetes-el-control-temprano-puede-marcar-la-diferencia","Cuidadores"],
+      ["Enfermedad Renal Crónica","https://hic.fcv.org/co/material-educativo/enfermedad-renal-cronica","Cuidadores"],
+      ["Guía del manejo del dengue: ¿Qué hacer y cuándo preocuparse?","https://hic.fcv.org/co/material-educativo/2026-06-18-21-28-18","Cuidadores"],
+      ["Vive Saludable: Guía educativa para personas con diabetes y tratamiento con insulina","https://hic.fcv.org/co/material-educativo/2026-06-18-21-39-24","Cuidadores"],
+      ["Infecciones de transmisión sexual","https://hic.fcv.org/co/material-educativo/2026-06-25-18-45-47","Cuidadores"],
+      ["Datos sobre el VIH","https://hic.fcv.org/co/material-educativo/2026-06-25-19-08-29","Cuidadores"],
+      ["Estilos de Vida Saludable","https://hic.fcv.org/co/material-educativo/2026-06-25-19-57-30","Cuidadores"],
+      ["El VPH es común. La prevención también debería serlo","https://hic.fcv.org/co/material-educativo/el-vph-es-comun-la-prevencion-tambien-deberia-serlo","Cuidadores"],
+      ["Pirámide alimenticia","https://hic.fcv.org/co/material-educativo/2026-08-12-13-11-10","Cuidadores"],
+      ["Actividad física en casa - ejercicios suaves para cuidar tu salud","https://hic.fcv.org/co/material-educativo/2026-04-10-19-13-58","Ortopédico"],
+      ["Medición de glucosa fácil: lo que nadie te explica","https://hic.fcv.org/co/material-educativo/medicion-de-glucosa-facil-lo-que-nadie-te-explica","Ortopédico"]
+    ]},
+    {slug:"preparate-para-tu-examen-o-procedimiento", nombre:"Prepárate para tu Examen o Procedimiento", icon:"ic-clipboard", color:"#8a6a2f", items:[
+      ["Polisomnografía","https://hic.fcv.org/co/material-educativo/2026-07-17-16-08-22","Prestadores de salud"],
+      ["Videotelemetría","https://hic.fcv.org/co/material-educativo/2026-07-17-16-10-00","Prestadores de salud"],
+      ["Prevención de caídas durante la prueba de esfuerzo","https://hic.fcv.org/co/material-educativo/prevencion-de-caidas-durante-la-prueba-de-esfuerzo","Cuidadores"],
+      ["Dejando huella con imágenes seguras","https://hic.fcv.org/co/material-educativo/2026-10-07-14-55-26","Cuidadores"]
+    ]},
+    {slug:"procedimientos", nombre:"Procedimientos", icon:"ic-syringe", color:"#4f6a8a", items:[
+      ["Electromiografía y electroconducción","https://hic.fcv.org/co/material-educativo/2026-08-10-20-27-31","Cuidadores"]
+    ]},
+    {slug:"oncohematologia-pediatrica", nombre:"Oncohematología Pediátrica", icon:"ic-drop", color:"#a5304f", items:[
+      ["Guía para pacientes oncológicos pediátricos y su familia","https://hic.fcv.org/co/material-educativo/2026-07-17-16-31-23","Cuidadores"],
+      ["Lo que debe saber sobre los efectos de la quimioterapia y radioterapia","https://hic.fcv.org/co/material-educativo/2026-07-17-16-46-28","Cuidadores"],
+      ["Manejo de las náuseas y el vómito durante el tratamiento oncológico","https://hic.fcv.org/co/material-educativo/2026-07-17-16-59-14","Cuidadores"],
+      ["Catéteres","https://hic.fcv.org/co/material-educativo/2026-07-17-17-07-28","Cuidadores"],
+      ["Mucositis: Prevención y cuidado","https://hic.fcv.org/co/material-educativo/2026-07-17-17-16-01","Cuidadores"],
+      ["Manual Pediatric Oncology Unit","https://hic.fcv.org/co/material-educativo/2026-07-17-17-23-33","Cuidadores"],
+      ["Cáncer Infantil","https://hic.fcv.org/co/material-educativo/cancer-infantil","Cuidadores"],
+      ["Conociendo la Leucemia","https://hic.fcv.org/co/material-educativo/2026-09-11-15-41-18","Cuidadores"]
+    ]},
+    {slug:"medicina-deportiva", nombre:"Medicina Deportiva", icon:"ic-shoe", color:"#2f8a4f", items:[
+      ["Ejercicios prácticos para activar el cuerpo y promover una vida más saludable","https://hic.fcv.org/co/material-educativo/2026-08-06-12-46-27","Cuidadores"],
+      ["Plan individual de ejercicio seguro y progresivo","https://hic.fcv.org/co/material-educativo/2026-08-06-12-57-57","Cuidadores"],
+      ["Guía Estiramientos","https://hic.fcv.org/co/material-educativo/2026-08-10-16-26-16","Cuidadores"],
+      ["Plan de Ejercicios: Fortalecimiento de Miembros Superiores e Inferiores","https://hic.fcv.org/co/material-educativo/2026-08-13-13-15-05","Cuidadores"],
+      ["Activa tu día y fortalece tu corazón","https://hic.fcv.org/co/material-educativo/2026-09-18-14-00-05","Cuidadores"]
+    ]},
+    {slug:"trasplante", nombre:"Trasplante", icon:"ic-swap", color:"#6a4a8a", items:[
+      ["Orientaciones al alta para pacientes pediátricos con trasplante renal","https://hic.fcv.org/co/material-educativo/2026-09-18-15-05-37","Cuidadores"],
+      ["Orientaciones en casa después del Trasplante Renal Pediátrico","https://hic.fcv.org/co/material-educativo/2026-09-18-15-13-04","Cuidadores"],
+      ["Guía Educativa para Pacientes Post Trasplante Hepático","https://hic.fcv.org/co/material-educativo/2026-10-20-16-13-58","Cuidadores"]
+    ]}
+  ];
+
+  // Flatten into one searchable list of individual pieces, keeping their specialty for icon/color.
+  var pieces = [];
+  specialties.forEach(function(sp){
+    sp.items.forEach(function(it){
+      pieces.push({
+        title: it[0], href: it[1], tag: it[2],
+        spSlug: sp.slug, spName: sp.nombre, icon: sp.icon, color: sp.color
+      });
+    });
+  });
+
+  function norm(s){
+    return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+  }
+
+  function badge(p, cls){
+    return '<span class="'+cls+'" style="background:'+p.color+'"><svg><use href="#'+p.icon+'"/></svg></span>';
+  }
+
+  function detailHTML(p){
+    return '<div class="detail-card">'+
+      badge(p,"badge")+
+      '<div><h2>'+p.title+'</h2>'+
+      '<p class="meta">'+p.spName+' · '+p.tag+'</p>'+
+      '<a class="open" href="'+p.href+'" target="_blank" rel="noopener">Abrir pieza en hic.fcv.org →</a>'+
+      '</div></div>';
+  }
+
+  function itemHTML(p, idx){
+    return '<button type="button" class="item" data-idx="'+idx+'">'+
+      '<span class="dot" style="background:'+p.color+'"></span>'+
+      '<span class="it-txt"><span class="it-title">'+p.title+'</span><br><span class="it-tag">'+p.tag+'</span></span>'+
+      '<span class="go">Ver →</span>'+
+      '</button>';
+  }
+
+  // Render catalog grouped by specialty, each item carrying its global index into `pieces`.
+  var catalog = document.getElementById("catalog");
+  var html = "";
+  var cursor = 0;
+  specialties.forEach(function(sp){
+    var start = cursor;
+    var rows = sp.items.map(function(_, i){ return itemHTML(pieces[start+i], start+i); }).join("");
+    cursor += sp.items.length;
+    html +=
+      '<div class="group" data-slug="'+sp.slug+'">'+
+        '<div class="group-head">'+
+          badge(sp,"mini-badge")+
+          '<h4>'+sp.nombre+'</h4>'+
+          '<span class="n">'+sp.items.length+'</span>'+
+        '</div>'+
+        '<div class="items">'+rows+'</div>'+
+      '</div>';
+  });
+  catalog.innerHTML = html;
+  document.getElementById("countLabel").textContent = pieces.length + " piezas en " + specialties.length + " categorías";
+
+  var resultado = document.getElementById("resultado");
+  var form = document.getElementById("searchForm");
+  var input = document.getElementById("q");
+  var itemEls = catalog.querySelectorAll(".item");
+  var groupEls = catalog.querySelectorAll(".group");
+
+  function runSearch(term){
+    var q = norm(term.trim());
+
+    if (!q){
+      resultado.innerHTML = "";
+      itemEls.forEach(function(el){ el.hidden = false; el.classList.remove("match"); });
+      groupEls.forEach(function(el){ el.hidden = false; });
+      return;
+    }
+
+    var matchIdx = {};
+    pieces.forEach(function(p, i){
+      if (norm(p.title).indexOf(q) !== -1 || norm(p.tag).indexOf(q) !== -1 || norm(p.spName).indexOf(q) !== -1){
+        matchIdx[i] = true;
+      }
+    });
+    var matches = Object.keys(matchIdx).map(function(k){ return pieces[k]; });
+
+    itemEls.forEach(function(el){
+      var idx = el.getAttribute("data-idx");
+      var isMatch = !!matchIdx[idx];
+      el.hidden = !isMatch;
+      el.classList.toggle("match", isMatch);
+    });
+    groupEls.forEach(function(el){
+      var visible = el.querySelectorAll(".item:not([hidden])").length;
+      el.hidden = visible === 0;
+    });
+
+    if (matches.length === 0){
+      resultado.innerHTML =
+        '<p class="result-banner">0 resultados para "<b>'+term.trim()+'</b>"</p>'+
+        '<div class="empty-msg">No se encontró ninguna pieza con ese nombre exacto. Prueba con una palabra más corta, por ejemplo «falla cardíaca» en vez de «lo que necesitas saber de la falla cardíaca».</div>';
+      return;
+    }
+
+    resultado.innerHTML =
+      '<p class="result-banner"><b>'+matches.length+'</b> resultado'+(matches.length===1?"":"s")+' para "<b>'+term.trim()+'</b>"</p>'+
+      matches.map(detailHTML).join("");
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    runSearch(input.value);
+  });
+
+  input.addEventListener("input", function(){
+    runSearch(input.value);
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", function(){
+    input.value = "";
+    runSearch("");
+    input.focus();
+  });
+
+  catalog.addEventListener("click", function(e){
+    var item = e.target.closest(".item");
+    if (!item) return;
+    var idx = item.getAttribute("data-idx");
+    var p = pieces[idx];
+    if (!p) return;
+    input.value = p.title;
+    runSearch(p.title);
+    resultado.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+})();
+</script>
+
+</body>
+</html>
