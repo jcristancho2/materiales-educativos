@@ -10,41 +10,43 @@
 <style>
 /* Layout: search header, a result banner with the exact piece found, then the catalog grouped by especialidad */
 :root{
-  --bg:#f2f5f6;
-  --surface:#ffffff;
-  --fg:#152027;
-  --muted:#5b6b76;
-  --line:#dde4e7;
-  --accent:#0d6e5e;
-  --accent-ink:#083f35;
-  --found:#b5541f;
-  --found-bg:#fbeee7;
+  /* Paleta institucional HIC / FCV */
+  --bg:#F8FAFC;            /* slate-50: fondo general */
+  --surface:#FFFFFF;       /* tarjetas y contenedores */
+  --fg:#0F172A;            /* slate-900: texto principal */
+  --muted:#64748B;         /* slate-500: texto secundario */
+  --line:#E2E8F0;          /* slate-200: bordes y divisores */
+  --accent:#97113A;        /* vinotinto principal HIC (Pantone 194 CP) */
+  --accent-ink:#721739;    /* vinotinto oscuro */
+  --gold:#FFDB34;          /* amarillo/dorado acento HIC */
+  --found:#FFDB34;
+  --found-bg:#FFFBEB;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#10171b;
-    --surface:#182228;
-    --fg:#e9eef0;
-    --muted:#93a4ad;
-    --line:#2b383f;
-    --accent:#3fcbae;
-    --accent-ink:#bdf3e5;
-    --found:#f3a479;
-    --found-bg:#2c1f17;
+    --bg:#0F172A;
+    --surface:#1E293B;
+    --fg:#F1F5F9;
+    --muted:#94A3B8;
+    --line:#334155;
+    --accent:#97113A;
+    --accent-ink:#FFDB34;
+    --found:#FFDB34;
+    --found-bg:#2A2410;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#10171b;
-  --surface:#182228;
-  --fg:#e9eef0;
-  --muted:#93a4ad;
-  --line:#2b383f;
-  --accent:#3fcbae;
-  --accent-ink:#bdf3e5;
-  --found:#f3a479;
-  --found-bg:#2c1f17;
+  --bg:#0F172A;
+  --surface:#1E293B;
+  --fg:#F1F5F9;
+  --muted:#94A3B8;
+  --line:#334155;
+  --accent:#97113A;
+  --accent-ink:#FFDB34;
+  --found:#FFDB34;
+  --found-bg:#2A2410;
   color-scheme: dark;
 }
 *{box-sizing:border-box}
@@ -310,7 +312,7 @@ footer.note a{color:var(--muted)}
 <script>
 (function(){
   var specialties = [
-    {slug:"cancer", nombre:"Cáncer", icon:"ic-ribbon", color:"#b5541f", items:[
+    {slug:"cancer", nombre:"Cáncer", icon:"ic-ribbon", color:"#721739", items:[
       ["Cáncer de Próstata","https://hic.fcv.org/co/material-educativo/2026-06-25-19-50-29","Cuidadores"],
       ["Cáncer de mama","https://hic.fcv.org/co/material-educativo/cancer-de-mama","Cáncer de mama"],
       ["Sobreviviendo al cáncer de mama","https://hic.fcv.org/co/material-educativo/sobreviviendo-al-cancer-de-mama","Cáncer de mama"],
@@ -319,7 +321,7 @@ footer.note a{color:var(--muted)}
       ["Cáncer en palabras sencillas: Una guia para todos","https://hic.fcv.org/co/material-educativo/cancer-en-palabras-sencillas-una-guia-para-todos","Cáncer en palabras sencillas"],
       ["Detección y prevención del cáncer de mama","https://hic.fcv.org/co/material-educativo/deteccion-y-prevencion-del-cancer-de-mama","Cáncer de mama"]
     ]},
-    {slug:"neurologia", nombre:"Neurología", icon:"ic-brain", color:"#5b4fb0", items:[
+    {slug:"neurologia", nombre:"Neurología", icon:"ic-brain", color:"#334155", items:[
       ["Estimulación Magnética Transcraneal","https://hic.fcv.org/co/material-educativo/2026-06-19-15-55-37","Neurológico"],
       ["Rehabilitación hospitalaria del paciente con ataque cerebrovascular (ACV)","https://hic.fcv.org/co/material-educativo/rehabilitacion-hospitalaria-del-paciente-acv","Neurológico"],
       ["Rehabilitación en casa del paciente con ataque cerebrovascular (ACV)","https://hic.fcv.org/co/material-educativo/rehabilitacion-en-casa-del-paciente-cerebrovascular-acv","Neurológico"],
@@ -329,7 +331,7 @@ footer.note a{color:var(--muted)}
       ["Síntomas ACV","https://hic.fcv.org/co/material-educativo/sintomas-acv","Síntomas ACV"],
       ["Ejercicios de rehabilitación post ACV","https://hic.fcv.org/co/material-educativo/ejercicios-de-rehabilitacion-post-acv","Síntomas ACV"]
     ]},
-    {slug:"ortopedia", nombre:"Ortopedia", icon:"ic-bone", color:"#3a6ea5", items:[
+    {slug:"ortopedia", nombre:"Ortopedia", icon:"ic-bone", color:"#2563EB", items:[
       ["¡Evita lesiones en tus rodillas!","https://hic.fcv.org/co/material-educativo/2026-08-10-20-19-32","Ortopédico"],
       ["Cartilla educativa: Reemplazo Articular de Cadera","https://hic.fcv.org/co/material-educativo/2026-08-13-13-25-49","Reemplazo de cadera y rodilla"],
       ["¿Qué esperar de una cirugía de reemplazo total de rodilla?","https://hic.fcv.org/co/material-educativo/2026-08-14-14-37-29","Cuidadores"],
@@ -343,7 +345,7 @@ footer.note a{color:var(--muted)}
       ["Recomendaciones para el paciente antes, durante y después de su cirugía","https://hic.fcv.org/co/material-educativo/2026-06-02-12-45-27","Ortopédico"],
       ["Patient Recommendations Before, during, and after your joint replacement surgery","https://hic.fcv.org/co/material-educativo/2026-06-02-12-47-20","Ortopédico"]
     ]},
-    {slug:"cardiovascular", nombre:"Cardiovascular", icon:"ic-heart", color:"#c23b3b", items:[
+    {slug:"cardiovascular", nombre:"Cardiovascular", icon:"ic-heart", color:"#97113A", items:[
       ["Anticoagulación para pacientes con warfarina","https://hic.fcv.org/co/material-educativo/2026-06-18-19-43-00","Cuidadores"],
       ["Recomendaciones para pacientes en tratamiento con anticoagulantes","https://hic.fcv.org/co/material-educativo/2026-06-18-20-37-25","Cuidadores"],
       ["Lo que necesitas saber de la Falla Cardíaca","https://hic.fcv.org/co/material-educativo/2026-08-14-14-11-24","Cuidadores"],
@@ -355,7 +357,7 @@ footer.note a{color:var(--muted)}
       ["Folleto cardiopatías congénitas en el adulto","https://hic.fcv.org/co/material-educativo/2026-06-17-14-41-21","Cardiopatías congénitas complejas"],
       ["Cardiopatías congénitas complejas","https://hic.fcv.org/co/material-educativo/cardiopatias-congenitas-complejas","Cardiopatías congénitas complejas"]
     ]},
-    {slug:"cuidado-de-la-mujer", nombre:"Cuidado de la Mujer", icon:"ic-female", color:"#b23a73", items:[
+    {slug:"cuidado-de-la-mujer", nombre:"Cuidado de la Mujer", icon:"ic-female", color:"#BE123C", items:[
       ["¿Qué es una ligadura de trompas?","https://hic.fcv.org/co/material-educativo/2026-06-25-18-56-24","Cuidadores"],
       ["Planificación Familiar","https://hic.fcv.org/co/material-educativo/2026-06-25-19-27-42","Cuidadores"],
       ["Maternidad segura","https://hic.fcv.org/co/material-educativo/2026-08-12-13-19-00","Cuidadores"],
@@ -368,7 +370,7 @@ footer.note a{color:var(--muted)}
       ["Piso Pélvico","https://hic.fcv.org/co/material-educativo/piso-pelvico","Cuidado de la Mujer"],
       ["Endometriosis","https://hic.fcv.org/co/material-educativo/endometriosis","Cuidado de la Mujer"]
     ]},
-    {slug:"pediatria", nombre:"Pediatría", icon:"ic-baby", color:"#2f9e6e", items:[
+    {slug:"pediatria", nombre:"Pediatría", icon:"ic-baby", color:"#059669", items:[
       ["Aprende a manejar el asma infantil","https://hic.fcv.org/co/material-educativo/aprende-a-manejar-el-asma-infantil","Asma infantil"],
       ["Cartillas Piso Pélvico","https://hic.fcv.org/co/material-educativo/cartillas-piso-pelvico","Cuidado de la Mujer"],
       ["Desarrollo neurológico de los niños","https://hic.fcv.org/co/material-educativo/2026-08-12-13-50-49","Cuidadores"],
@@ -390,25 +392,25 @@ footer.note a{color:var(--muted)}
       ["Tu salud, nuestra prioridad","https://hic.fcv.org/co/material-educativo/tu-salud-nuestra-prioridad","Pediatría"],
       ["¿Por qué un niño puede tener talla baja?","https://hic.fcv.org/co/material-educativo/2026-08-10-20-48-51","Cuidadores"]
     ]},
-    {slug:"cirugia-plastica-reconstructiva-y-estetica", nombre:"Cirugía Plástica, Reconstructiva y Estética", icon:"ic-mirror", color:"#a3762f", items:[
+    {slug:"cirugia-plastica-reconstructiva-y-estetica", nombre:"Cirugía Plástica, Reconstructiva y Estética", icon:"ic-mirror", color:"#D97706", items:[
       ["Aprende sobre las quemaduras con Max","https://hic.fcv.org/co/material-educativo/2026-07-21-20-41-01","Cuidadores"],
       ["Cuidados del paciente injertado en el hogar","https://hic.fcv.org/co/material-educativo/cuidados-del-paciente-injertado-en-el-hogar","Quemaduras en el hogar"],
       ["Cuidados del paciente quemado en el hogar","https://hic.fcv.org/co/material-educativo/cuidados-del-paciente-quemado-en-el-hogar","Quemaduras en el hogar"],
       ["Prevención de Quemaduras en el Hogar","https://hic.fcv.org/co/material-educativo/prevencion-quemaduras-en-el-hogar","Prevención de quemaduras"],
       ["Prevención de quemaduras: protege tu salud y la de tu familia","https://hic.fcv.org/co/material-educativo/prevencion-quemaduras-protege-tu-salud-y-la-de-familia","Prevención de quemaduras"]
     ]},
-    {slug:"alivio-del-dolor-y-cuidado-paliativo", nombre:"Alivio del Dolor y Cuidado Paliativo", icon:"ic-hands", color:"#6a6f78", items:[
+    {slug:"alivio-del-dolor-y-cuidado-paliativo", nombre:"Alivio del Dolor y Cuidado Paliativo", icon:"ic-hands", color:"#64748B", items:[
       ["Fibromialgia","https://hic.fcv.org/co/material-educativo/2026-08-12-13-34-55","Cuidadores"],
       ["Cuidados paliativos","https://hic.fcv.org/co/material-educativo/cuidados-paliativos","Cuidados paliativos"]
     ]},
-    {slug:"cuidado-de-la-salud-digestiva", nombre:"Cuidado de la Salud Digestiva", icon:"ic-stomach", color:"#c07a1f", items:[
+    {slug:"cuidado-de-la-salud-digestiva", nombre:"Cuidado de la Salud Digestiva", icon:"ic-stomach", color:"#D97706", items:[
       ["¿Qué es la Enfermedad Diarreica Aguda (EDA)?","https://hic.fcv.org/co/material-educativo/2026-06-25-19-35-33","Cuidadores"],
       ["Coledocolitiasis - Cartilla educativa","https://hic.fcv.org/co/material-educativo/2026-07-01-13-02-40","Cuidadores"],
       ["Lesión Benigna de la Vía Biliar - Cartilla educativa","https://hic.fcv.org/co/material-educativo/2026-07-01-13-09-57","Cuidadores"],
       ["EII","https://hic.fcv.org/co/material-educativo/2026-08-12-13-45-37","Cuidadores"],
       ["Transformando la Enfermedad Inflamatoria Intestinal en conocimiento","https://hic.fcv.org/co/material-educativo/2026-04-13-16-57-20","Cuidadores"]
     ]},
-    {slug:"nefrologia-y-urologia", nombre:"Nefrología y Urología", icon:"ic-kidney", color:"#2f8e8e", items:[
+    {slug:"nefrologia-y-urologia", nombre:"Nefrología y Urología", icon:"ic-kidney", color:"#2563EB", items:[
       ["Cólico renal","https://hic.fcv.org/co/material-educativo/colico-renal","Cólico renal"],
       ["Prevención y manejo de la urolitiasis","https://hic.fcv.org/co/material-educativo/prevencion-y-manejo-de-la-urolitiasis","Urolitiasis"],
       ["Acompañándote en Casa - Cuidados con tu Nefrostomía","https://hic.fcv.org/co/material-educativo/acompanandote-en-casa-cuidados-con-tu-nefrostomia","Nefrostomía"],
@@ -417,30 +419,30 @@ footer.note a{color:var(--muted)}
       ["Lo que necesitas saber de la enfermedad renal crónica","https://hic.fcv.org/co/material-educativo/lo-que-necesitas-saber-de-la-enfermedad-renal-cronica","Enfermedad Renal Crónica"],
       ["Cálculos urinarios","https://hic.fcv.org/co/material-educativo/calculos-urinarios","Cálculos urinarios"]
     ]},
-    {slug:"cuidado-de-la-salud-respiratoria", nombre:"Cuidado de la Salud Respiratoria", icon:"ic-lungs", color:"#3f8fc4", items:[
+    {slug:"cuidado-de-la-salud-respiratoria", nombre:"Cuidado de la Salud Respiratoria", icon:"ic-lungs", color:"#2563EB", items:[
       ["Infección Respiratoria Aguda (IRA)","https://hic.fcv.org/co/material-educativo/2026-06-25-19-44-12","Cuidadores"],
       ["Enfermedad Pulmonar Obstructiva Crónica - EPOC","https://hic.fcv.org/co/material-educativo/enfermedad-pulmonar-obstructiva-cronica-epoc","EPOC"],
       ["Guía de Autocuidado para Pacientes con Hipertensión Pulmonar","https://hic.fcv.org/co/material-educativo/autocuidado-pacientes-hipertension-pulmonar","Hipertensión Pulmonar"]
     ]},
-    {slug:"medicina-interna", nombre:"Medicina Interna", icon:"ic-stetho", color:"#4a5a8a", items:[
+    {slug:"medicina-interna", nombre:"Medicina Interna", icon:"ic-stetho", color:"#334155", items:[
       ["Hipertensión arterial: El enemigo silencioso","https://hic.fcv.org/co/material-educativo/2026-06-18-18-17-33","Manejo de la Hipertension Arterial"],
       ["Cartilla educativa Viviendo con diabetes mellitus","https://hic.fcv.org/co/material-educativo/cartilla-educativa-viviendo-con-diabetes-mellitus","Cuidadores"],
       ["El poder de usar bien los medicamentos","https://hic.fcv.org/co/material-educativo/el-poder-de-usar-bien-los-medicamentos","Cuidadores"]
     ]},
-    {slug:"infectologia", nombre:"Infectología", icon:"ic-shield", color:"#2f7d4f", items:[
+    {slug:"infectologia", nombre:"Infectología", icon:"ic-shield", color:"#059669", items:[
       ["Resistencia a los antibióticos: infórmate, actúa y protege tu salud y la de tu familia","https://hic.fcv.org/co/material-educativo/2026-06-18-20-53-14","Infecciones respiratorias agudas"],
       ["Hantavirus","https://hic.fcv.org/co/material-educativo/2026-08-12-13-40-18","Cuidadores"],
       ["Automedicarse no es cuidarte","https://hic.fcv.org/co/material-educativo/automedicarse","Infecciones respiratorias agudas"],
       ["Recomendaciones para el manejo de infecciones de vías urinarias","https://hic.fcv.org/co/material-educativo/recomendaciones-para-padres-con-pacientes-pediatricos","Vías urinarias"]
     ]},
-    {slug:"salud-mental", nombre:"Salud Mental", icon:"ic-mind", color:"#7a4fb0", items:[
+    {slug:"salud-mental", nombre:"Salud Mental", icon:"ic-mind", color:"#721739", items:[
       ["Prevención del suicidio","https://hic.fcv.org/co/material-educativo/prevencion-del-suicidio","Prevención del suicidio"],
       ["Hábitos de vida saludable","https://hic.fcv.org/co/material-educativo/habitos-de-vida-saludable","Neurológico"],
       ["Adherencia al tratamiento","https://hic.fcv.org/co/material-educativo/adherencia-al-tratamiento","Cuidadores"],
       ["Cuidar tu mente ayuda a tu cuerpo","https://hic.fcv.org/co/material-educativo/cuidar-tu-mente-ayuda-a-tu-cuerpo","Cuidadores"],
       ["Síndrome del cuidador","https://hic.fcv.org/co/material-educativo/sindrome-del-cuidador","Cuidadores"]
     ]},
-    {slug:"medicina-fisica-y-rehabilitacion", nombre:"Medicina Física y Rehabilitación", icon:"ic-dumbbell", color:"#3a8a5a", items:[
+    {slug:"medicina-fisica-y-rehabilitacion", nombre:"Medicina Física y Rehabilitación", icon:"ic-dumbbell", color:"#059669", items:[
       ["¿Te operaron de cadera o rodilla? Estos ejercicios son clave para tu recuperación","https://hic.fcv.org/co/material-educativo/2026-04-09-15-10-09","Ortopédico"],
       ["Cuidado del hombro después de un ACV","https://hic.fcv.org/co/material-educativo/cuidado-del-hombro-despue-s-de-un-acv","Ataque Cerebrovascular"],
       ["Recomendaciones para evitar luxaciones tras un reemplazo de cadera","https://hic.fcv.org/co/material-educativo/2026-04-09-15-12-33","Ortopédico"],
@@ -448,7 +450,7 @@ footer.note a{color:var(--muted)}
       ["Guía práctica para fortalecer tus habilidades motoras, sensoriales y cognitivas","https://hic.fcv.org/co/material-educativo/fortalecer-tus-habilidades-motoras","Ortopédico"],
       ["Prepárate para tu reemplazo de cadera o rodilla","https://hic.fcv.org/co/material-educativo/2026-03-31-13-15-20","Ortopédico"]
     ]},
-    {slug:"promocion-y-mantenimiento-de-la-salud", nombre:"Promoción y Mantenimiento de la Salud", icon:"ic-heartplus", color:"#1f8f7a", items:[
+    {slug:"promocion-y-mantenimiento-de-la-salud", nombre:"Promoción y Mantenimiento de la Salud", icon:"ic-heartplus", color:"#059669", items:[
       ["Diabetes: el control temprano puede marcar la diferencia","https://hic.fcv.org/co/material-educativo/diabetes-el-control-temprano-puede-marcar-la-diferencia","Cuidadores"],
       ["Enfermedad Renal Crónica","https://hic.fcv.org/co/material-educativo/enfermedad-renal-cronica","Cuidadores"],
       ["Guía del manejo del dengue: ¿Qué hacer y cuándo preocuparse?","https://hic.fcv.org/co/material-educativo/2026-06-18-21-28-18","Cuidadores"],
@@ -461,16 +463,16 @@ footer.note a{color:var(--muted)}
       ["Actividad física en casa - ejercicios suaves para cuidar tu salud","https://hic.fcv.org/co/material-educativo/2026-04-10-19-13-58","Ortopédico"],
       ["Medición de glucosa fácil: lo que nadie te explica","https://hic.fcv.org/co/material-educativo/medicion-de-glucosa-facil-lo-que-nadie-te-explica","Ortopédico"]
     ]},
-    {slug:"preparate-para-tu-examen-o-procedimiento", nombre:"Prepárate para tu Examen o Procedimiento", icon:"ic-clipboard", color:"#8a6a2f", items:[
+    {slug:"preparate-para-tu-examen-o-procedimiento", nombre:"Prepárate para tu Examen o Procedimiento", icon:"ic-clipboard", color:"#64748B", items:[
       ["Polisomnografía","https://hic.fcv.org/co/material-educativo/2026-07-17-16-08-22","Prestadores de salud"],
       ["Videotelemetría","https://hic.fcv.org/co/material-educativo/2026-07-17-16-10-00","Prestadores de salud"],
       ["Prevención de caídas durante la prueba de esfuerzo","https://hic.fcv.org/co/material-educativo/prevencion-de-caidas-durante-la-prueba-de-esfuerzo","Cuidadores"],
       ["Dejando huella con imágenes seguras","https://hic.fcv.org/co/material-educativo/2026-10-07-14-55-26","Cuidadores"]
     ]},
-    {slug:"procedimientos", nombre:"Procedimientos", icon:"ic-syringe", color:"#4f6a8a", items:[
+    {slug:"procedimientos", nombre:"Procedimientos", icon:"ic-syringe", color:"#334155", items:[
       ["Electromiografía y electroconducción","https://hic.fcv.org/co/material-educativo/2026-08-10-20-27-31","Cuidadores"]
     ]},
-    {slug:"oncohematologia-pediatrica", nombre:"Oncohematología Pediátrica", icon:"ic-drop", color:"#a5304f", items:[
+    {slug:"oncohematologia-pediatrica", nombre:"Oncohematología Pediátrica", icon:"ic-drop", color:"#BE123C", items:[
       ["Guía para pacientes oncológicos pediátricos y su familia","https://hic.fcv.org/co/material-educativo/2026-07-17-16-31-23","Cuidadores"],
       ["Lo que debe saber sobre los efectos de la quimioterapia y radioterapia","https://hic.fcv.org/co/material-educativo/2026-07-17-16-46-28","Cuidadores"],
       ["Manejo de las náuseas y el vómito durante el tratamiento oncológico","https://hic.fcv.org/co/material-educativo/2026-07-17-16-59-14","Cuidadores"],
@@ -480,14 +482,14 @@ footer.note a{color:var(--muted)}
       ["Cáncer Infantil","https://hic.fcv.org/co/material-educativo/cancer-infantil","Cuidadores"],
       ["Conociendo la Leucemia","https://hic.fcv.org/co/material-educativo/2026-09-11-15-41-18","Cuidadores"]
     ]},
-    {slug:"medicina-deportiva", nombre:"Medicina Deportiva", icon:"ic-shoe", color:"#2f8a4f", items:[
+    {slug:"medicina-deportiva", nombre:"Medicina Deportiva", icon:"ic-shoe", color:"#2563EB", items:[
       ["Ejercicios prácticos para activar el cuerpo y promover una vida más saludable","https://hic.fcv.org/co/material-educativo/2026-08-06-12-46-27","Cuidadores"],
       ["Plan individual de ejercicio seguro y progresivo","https://hic.fcv.org/co/material-educativo/2026-08-06-12-57-57","Cuidadores"],
       ["Guía Estiramientos","https://hic.fcv.org/co/material-educativo/2026-08-10-16-26-16","Cuidadores"],
       ["Plan de Ejercicios: Fortalecimiento de Miembros Superiores e Inferiores","https://hic.fcv.org/co/material-educativo/2026-08-13-13-15-05","Cuidadores"],
       ["Activa tu día y fortalece tu corazón","https://hic.fcv.org/co/material-educativo/2026-09-18-14-00-05","Cuidadores"]
     ]},
-    {slug:"trasplante", nombre:"Trasplante", icon:"ic-swap", color:"#6a4a8a", items:[
+    {slug:"trasplante", nombre:"Trasplante", icon:"ic-swap", color:"#97113A", items:[
       ["Orientaciones al alta para pacientes pediátricos con trasplante renal","https://hic.fcv.org/co/material-educativo/2026-09-18-15-05-37","Cuidadores"],
       ["Orientaciones en casa después del Trasplante Renal Pediátrico","https://hic.fcv.org/co/material-educativo/2026-09-18-15-13-04","Cuidadores"],
       ["Guía Educativa para Pacientes Post Trasplante Hepático","https://hic.fcv.org/co/material-educativo/2026-10-20-16-13-58","Cuidadores"]
