@@ -1,0 +1,39 @@
+name: Actualizar catálogo de piezas
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # todos los días a las 6:00 a. m. (hora de Colombia)
+  workflow_dispatch:        # también se puede lanzar a mano desde la pestaña Actions
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-catalogo
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pruebas del actualizador
+        run: python -m unittest discover -s scripts
+
+      - name: Leer el HIC y actualizar index.html
+        id: actualizar
+        run: python scripts/actualizar_catalogo.py
+
+      - name: Subir cambios si los hay
+        if: steps.actualizar.outputs.resumen != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Actualizar catálogo desde hic.fcv.org (${{ steps.actualizar.outputs.resumen }})"
+          git push
